@@ -1,0 +1,69 @@
+# project environment
+    ## Environments
+    .env
+    .venv
+    .myenv
+    env/
+    venv/
+    myenv/
+    ENV/
+    env.bak/
+    venv.bak/
+
+# data
+
+
+# IDE
+    ## User-specific stuff
+    .idea/**/workspace.xml
+    .idea/**/tasks.xml
+    .idea/**/usage.statistics.xml
+    .idea/**/dictionaries
+    .idea/**/shelf
+
+    ## Sensitive or high-churn files
+    .idea/**/dataSources/
+    .idea/**/dataSources.ids
+    .idea/**/dataSources.local.xml
+    .idea/**/sqlDataSources.xml
+    .idea/**/dynamic.xml
+    .idea/**/uiDesigner.xml
+    .idea/**/dbnavigator.xml
+
+    ## CMake
+    cmake-build-*/
+
+    ## Editor-based Rest Client
+    .idea/httpRequests
+
+# Python
+    .Python
+    build/
+    develop-eggs/
+    dist/
+    downloads/
+    eggs/
+    .eggs/
+    lib/
+    lib64/
+    parts/
+    sdist/
+    var/
+    wheels/
+    share/python-wheels/
+    *.egg-info/
+    .installed.cfg
+    *.egg
+    MANIFEST
+
+# git
+    *.orig
+    *.BACKUP.*
+    *.BASE.*
+    *.LOCAL.*
+    *.REMOTE.*
+    *_BACKUP_*.txt
+    *_BASE_*.txt
+    *_LOCAL_*.txt
+    *_REMOTE_*.txt
+    .gitignore
