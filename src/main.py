@@ -1,37 +1,23 @@
-import os
-
-os.chdir(".")
-
-MAIN_PATH = os.getcwd()
-CONFIG_PATH = os.path.join(MAIN_PATH, "..\\config\\ctg-oas-v2.yaml")
-
 from fastapi import FastAPI
-from fastapi.openapi.models import OpenAPI
-import yaml
-import requests
 
-with open(CONFIG_PATH, "r") as file:
-    openapi_config = yaml.safe_load(file)
+from app.controller import controller_clinicaltrials
 
 app = FastAPI()
-app.openapi = OpenAPI(**openapi_config)
 
-# OpenAPI belgesinden sunucu URL'sini alın
-servers = openapi_config.get("servers", [])
-if servers:
-    server_url = servers[0].get("url")
-else:
-    server_url = ""
 
-# API URL ve sorgu parametreleri
-api_url = f"{server_url}/studies"
-params = {
-    "pageSize": 10,  # Sayfa başına sonuç sayısı
-    "pageToken": None,  # İlk sayfada bu parametre boş olmalıdır
-    "query.cond": "cancer",
-    "filter.overallStatus": "RECRUITING"
-}
+app.include_router(controller_clinicaltrials.router)
 
+"""
+in controller section; below app.get should be like this;
+import requests
+
+@router.get("/api/v2/studies")
+async def [function_name]
+    ...
+    ...
+    return data
+
+### this below should be change to above
 @app.get("/api/v2/studies")
 def get_studies():
     response = requests.get(api_url, params=params)
@@ -41,7 +27,7 @@ def get_studies():
         studies = data["studies"]
         return studies
     else:
-        return {"error": "İstek başarısız"}
+        return {"error": "İstek başarısız"}"""
 
 if __name__ == "__main__":
     import uvicorn
