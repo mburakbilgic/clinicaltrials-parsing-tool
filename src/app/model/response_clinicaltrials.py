@@ -12,9 +12,3 @@ class ResponseClinicalTrial(BaseModel):
     conditions: str  # in response; protocolSection.conditionalModule.conditions.[in integer number key].conditions
     study_type: str  # in response; protocolSection.designModule.studyType
     eligibility_criteria: str  # in response; protocolSection.eligibilityModule.eligibilityCriteria
-
-    # T ODO:2
-    """
-    new arm interventions section should be investigate
-    other module also had additional information these areas should be investigate
-    """
