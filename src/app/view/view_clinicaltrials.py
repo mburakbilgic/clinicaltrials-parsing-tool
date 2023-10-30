@@ -3,5 +3,5 @@ from typing import Dict
 from src.app.model.response_clinicaltrials import ResponseClinicalTrial
 
 
-def clinicaltrials_response(data: ResponseClinicalTrial) -> Dict:
+def response_studies(data: ResponseClinicalTrial) -> Dict:
     return {"clinicaltrial_data": data}

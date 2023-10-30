@@ -1,8 +1,8 @@
 import os
 
+import yaml
 from fastapi import APIRouter, FastAPI
 from fastapi.openapi.models import OpenAPI
-import yaml
 
 from src.app.worker.worker_main import Worker
 
@@ -15,28 +15,28 @@ LOG_FILES = os.path.join(MAIN_PATH, "..\\logs")
 
 router = APIRouter()
 
-raw_clinicaltrials = Worker().func_mapping_clinicaltrials
-
+set_thread = Worker().func_thread_settings()
+get_clinicaltrials = Worker().func_get_clinicaltrials
+post_clinicaltrials = Worker().func_post_clinicaltrials()
 log_call = Worker().func_log
 
+# OpenAPI, Request URL and Query Parameters settings
 with open(CONFIG_PATH, "r") as file:
     openapi_config = yaml.safe_load(file)
 
-app = FastAPI()
-app.openapi = OpenAPI(**openapi_config)
+local_app = FastAPI()
+local_app.openapi = OpenAPI(**openapi_config)
 
-# OpenAPI belgesinden sunucu URL'sini alın
 servers = openapi_config.get("servers", [])
 if servers:
     server_url = servers[0].get("url")
 else:
     server_url = ""
 
-# API URL ve sorgu parametreleri
 api_url = f"{server_url}/studies"
 params = {
-    "pageSize": 10,  # Sayfa başına sonuç sayısı
-    "pageToken": None,  # İlk sayfada bu parametre boş olmalıdır
+    "pageSize": 10,  # Results of each page
+    "pageToken": None,  # In first page this should be empty
     "query.cond": "cancer",
     "filter.overallStatus": "RECRUITING"
 }
