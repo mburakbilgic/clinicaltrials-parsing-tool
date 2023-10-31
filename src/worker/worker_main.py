@@ -1,4 +1,4 @@
-from worker_tools.worker_studies import Studies
+from src.worker.worker_tools.worker_studies import Studies
 
 class Worker:
 

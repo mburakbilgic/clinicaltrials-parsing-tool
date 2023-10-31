@@ -1,12 +1,12 @@
 import requests
 
-import src.app as app
+import src
 
 
 class Studies:
 
     def __init__(self):
-        self.response = requests.get(app.api_url, params=app.params)
+        self.response = requests.get(src.api_url, params=src.params)
         self.studies = None
 
     def get_clinicaltrials(self):
