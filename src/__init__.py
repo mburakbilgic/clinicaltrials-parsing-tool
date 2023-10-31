@@ -1,9 +1,9 @@
 import os
 
 import yaml
+import requests
 from fastapi import APIRouter, FastAPI
 from fastapi.openapi.models import OpenAPI
-from src.worker.worker_main import Worker
 
 MAIN_PATH = os.getcwd()
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config", "ctg-oas-v2.yaml")
@@ -11,11 +11,6 @@ DATA_FILES = os.path.join(os.path.dirname(__file__), "data")
 LOG_FILES = os.path.join(os.path.dirname(__file__), "logs")
 
 router = APIRouter()
-
-set_thread = Worker().func_thread_settings()
-get_clinicaltrials = Worker().func_get_clinicaltrials
-post_clinicaltrials = Worker().func_post_clinicaltrials()
-log_call = Worker().func_log
 
 # OpenAPI, Request URL and Query Parameters settings
 with open(CONFIG_PATH, "r") as file:
@@ -37,3 +32,4 @@ params = {
     "query.cond": "cancer",
     "filter.overallStatus": "RECRUITING"
 }
+response = requests.get(api_url, params=params)
