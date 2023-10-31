@@ -25,8 +25,7 @@ class RequestStudiesClinicalTrial(BaseModel):
                         studies[each]["protocolSection"]["descriptionModule"]["detailedDescription"]: str
 
                     conditional module
-                        studies[each]["protocolSection"]["conditionalModule"]["conditions"]: list
-                        studies[each]["protocolSection"]["descriptionModule"]["detailedDescription"]: str
+                        studies[each]["protocolSection"]["conditionsModule"]["conditions"]: list
 
                     design module
                         studies[each]["protocolSection"]["designModule"]["studyType"]: str
@@ -35,8 +34,8 @@ class RequestStudiesClinicalTrial(BaseModel):
                         studies[each]["protocolSection"]["designModule"]["designInfo"]["interventionModel"]: str
                         studies[each]["protocolSection"]["designModule"]["designInfo"]["primaryPurpose"]: str
                         studies[each]["protocolSection"]["designModule"]["designInfo"]["maskingInfo"]["masking"]: str
-                        studies[each]["protocolSection"]["designModule"]["designInfo"]["enrollmentInfo"]["count"]: int
-                        studies[each]["protocolSection"]["designModule"]["designInfo"]["enrollmentInfo"]["type"]: str
+                        studies[each]["protocolSection"]["designModule"]["enrollmentInfo"]["count"]: int
+                        studies[each]["protocolSection"]["designModule"]["enrollmentInfo"]["type"]: str
 
                     eligibilty module
                         studies[each]["protocolSection"]["eligibilityModule"]["eligibilityCriteria"]: str
