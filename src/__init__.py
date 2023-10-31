@@ -6,9 +6,11 @@ from fastapi.openapi.models import OpenAPI
 from src.worker.worker_main import Worker
 
 MAIN_PATH = os.getcwd()
-CONFIG_PATH = os.path.join(MAIN_PATH, "\\config\\ctg-oas-v2.yaml")
-DATA_FILES = os.path.join(os.getcwd(), "/data")
-LOG_FILES = os.path.join(os.getcwd(), "/logs")
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config", "ctg-oas-v2.yaml")
+DATA_FILES = os.path.join(os.path.dirname(__file__), "data")
+LOG_FILES = os.path.join(os.path.dirname(__file__), "logs")
+print(DATA_FILES)
+print(LOG_FILES)
 
 router = APIRouter()
 
