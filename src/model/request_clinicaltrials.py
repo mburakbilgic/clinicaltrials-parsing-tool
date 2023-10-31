@@ -1,16 +1,6 @@
 from pydantic import BaseModel
 
 
-class RequestParamsClinicalTrial(BaseModel):
-
-    request_params = {
-        "pageSize": 10,  # Sayfa başına sonuç sayısı
-        "pageToken": None,  # İlk sayfada bu parametre boş olmalıdır
-        "query.cond": "cancer",
-        "filter.overallStatus": "RECRUITING"
-    }
-
-
 class RequestStudiesClinicalTrial(BaseModel):
     """
     studies: list of dictionaries
