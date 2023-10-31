@@ -9,8 +9,6 @@ MAIN_PATH = os.getcwd()
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config", "ctg-oas-v2.yaml")
 DATA_FILES = os.path.join(os.path.dirname(__file__), "data")
 LOG_FILES = os.path.join(os.path.dirname(__file__), "logs")
-print(DATA_FILES)
-print(LOG_FILES)
 
 router = APIRouter()
 
