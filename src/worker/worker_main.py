@@ -1,9 +1,12 @@
-from src.worker.worker_tools.worker_studies import Studies
+import src
+import requests
+
 
 class Worker:
 
     def __init__(self):
-        pass
+        self.studies = None
+        self.response = requests.get(src.api_url, params=src.params)
 
     def func_thread_settings(self):
         # T - 2
@@ -11,14 +14,15 @@ class Worker:
         pass
 
     def func_get_clinicaltrials(self):
-        return_object = Studies.get_clinicaltrials
-
-        return return_object
+        if self.response.status_code == 200:
+            data = self.response.json()
+            self.studies = data["studies"]
+            return self.studies
+        else:
+            return {"error": "Request failed"}
 
     def func_post_clinicaltrials(self):
-        return_object = Studies.post_clinicaltrials
-
-        return return_object
+        pass
 
     def func_log(self):
         # T - 4
