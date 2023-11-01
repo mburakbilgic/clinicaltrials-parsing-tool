@@ -5,7 +5,6 @@ from src.model.response_clinicaltrials import ResponseClinicalTrial
 
 
 def request_studies(data: RequestStudiesClinicalTrial) -> List:
-    print(data)
     return [data]
 
 
