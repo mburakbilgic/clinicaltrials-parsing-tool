@@ -21,4 +21,4 @@ async def get_studies():
 async def post_studies():
     mapped_studies = Worker().func_post_clinicaltrials()
 
-    return jsonable_encoder(response_studies(mapped_studies))
+    return response_studies(mapped_studies)
