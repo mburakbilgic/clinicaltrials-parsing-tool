@@ -1,6 +1,8 @@
 import src
 import requests
 
+from src.model.response_clinicaltrials import ResponseClinicalTrial as ResBody
+
 
 class Worker:
 
@@ -21,40 +23,51 @@ class Worker:
             return {"error": "Request failed"}
 
     def func_post_clinicaltrials(self):
-        # T - 2
-        # index for each trials
         studies = self.func_get_clinicaltrials()
 
         clinical_trials = []
 
         for each in range(len(studies)):
-            print(each)
-            """clinical_trials.append({
-                "nct_id": studies[each]["protocolSection"]["identificationModule"]["nctId"],
-                "brief_title": studies[each]["protocolSection"]["identificationModule"]["briefTitle"],
-                "official_title": studies[each]["protocolSection"]["identificationModule"]["officialTitle"],
-                "status_verified_date": studies[each]["protocolSection"]["statusModule"]["statusVerifiedDate"],
-                "overall_status": studies[each]["protocolSection"]["statusModule"]["overallStatus"],
-                "brief_summary": studies[each]["protocolSection"]["descriptionModule"]["briefSummary"],
-                "detailed_description": studies[each]["protocolSection"]["descriptionModule"]["detailedDescription"],
-                "conditions": studies[each]["protocolSection"]["conditionsModule"]["conditions"],
-                "study_type": studies[each]["protocolSection"]["designModule"]["studyType"],
-                "phases": studies[each]["protocolSection"]["designModule"]["phases"],
-                "allocation": studies[each]["protocolSection"]["designModule"]["designInfo"]["allocation"],
-                "intervention_model": studies[each]["protocolSection"]["designModule"]["designInfo"][
-                    "interventionModel"],
-                "primary_purpose": studies[each]["protocolSection"]["designModule"]["designInfo"]["primaryPurpose"],
-                "masking": studies[each]["protocolSection"]["designModule"]["designInfo"]["maskingInfo"]["masking"],
-                "count": studies[each]["protocolSection"]["designModule"]["enrollmentInfo"]["count"],
-                "type": studies[each]["protocolSection"]["designModule"]["enrollmentInfo"]["type"],
-                "eligibility_criteria": studies[each]["protocolSection"]["eligibilityModule"]["eligibilityCriteria"],
-                "healthy_volunteers": studies[each]["protocolSection"]["eligibilityModule"]["healthyVolunteers"],
-                "sex": studies[each]["protocolSection"]["eligibilityModule"]["sex"],
-                "minimum_age": studies[each]["protocolSection"]["eligibilityModule"]["minimumAge"],
-                "std_ages": studies[each]["protocolSection"]["eligibilityModule"]["stdAges"]
-            })"""
 
-        print(clinical_trials)
+            identificationModule = studies[each]["protocolSection"]["identificationModule"]
+            statusModule = studies[each]["protocolSection"]["statusModule"]
+            descriptionModule = studies[each]["protocolSection"]["descriptionModule"]
+            conditionsModule = studies[each]["protocolSection"]["conditionsModule"]
+            designModule = studies[each]["protocolSection"]["designModule"]
+            eligibilityModule = studies[each]["protocolSection"]["eligibilityModule"]
+
+            if "detailedDescription" in descriptionModule.items():
+                continue
+            else:
+                descriptionModule["detailedDescription"] = "N_A"
+
+            response = ResBody(
+                nct_id=identificationModule["nctId"],
+                brief_title=identificationModule["briefTitle"],
+                official_title=identificationModule["officialTitle"],
+                status_verified_date=statusModule["statusVerifiedDate"],
+                overall_status=statusModule["overallStatus"],
+                brief_summary=descriptionModule["briefSummary"],
+                detailed_description=descriptionModule["detailedDescription"],
+                conditions=conditionsModule["conditions"],
+                study_type=designModule["studyType"],
+                eligibility_criteria=eligibilityModule["eligibilityCriteria"]
+            )
+
+            clinical_trials.append({
+                "nct_id": response.nct_id,
+                "brief_title": response.brief_title,
+                "official_title": response.official_title,
+                "status_verified_date": response.status_verified_date,
+                "overall_status": response.overall_status,
+                "brief_summary": response.brief_summary,
+                "detailed_description": response.detailed_description,
+                "conditions": response.conditions,
+                "study_type": response.study_type,
+                "eligibility_criteria": response.eligibility_criteria
+            })
+
+        return clinical_trials
 
     def func_log(self):
         # T - 4
