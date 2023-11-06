@@ -1,4 +1,6 @@
 import src
+from collections import defaultdict
+
 import requests
 
 from src.model.response_clinicaltrials import ResponseClinicalTrial as ResBody
@@ -14,6 +16,29 @@ class Worker:
         # thread options required about chunksize process
         pass
 
+    def func_fillna_studies(self, sections):
+        keys_to_check = [
+            ("identificationModule", "nctId"),
+            ("identificationModule", "briefTitle"),
+            ("identificationModule", "officialTitle"),
+            ("statusModule", "statusVerifiedDate"),
+            ("statusModule", "overallStatus"),
+            ("descriptionModule", "briefSummary"),
+            ("descriptionModule", "detailedDescription"),
+            ("conditionsModule", "conditions"),
+            ("designModule", "studyType"),
+            ("eligibilityModule", "eligibilityCriteria")
+        ]
+
+        for key, subkey in keys_to_check:
+            if key in sections and subkey in sections[key]:
+                continue
+            else:
+                sections[key] = sections.get(key, {})
+                sections[key][subkey] = "N_A"
+
+        return sections
+
     def func_get_clinicaltrials(self):
         if self.response.status_code == 200:
             data = self.response.json()
@@ -28,18 +53,16 @@ class Worker:
         clinical_trials = []
 
         for each in range(len(studies)):
+            section = studies[each]["protocolSection"]
 
-            identificationModule = studies[each]["protocolSection"]["identificationModule"]
-            statusModule = studies[each]["protocolSection"]["statusModule"]
-            descriptionModule = studies[each]["protocolSection"]["descriptionModule"]
-            conditionsModule = studies[each]["protocolSection"]["conditionsModule"]
-            designModule = studies[each]["protocolSection"]["designModule"]
-            eligibilityModule = studies[each]["protocolSection"]["eligibilityModule"]
+            self.func_fillna_studies(section)
 
-            if "detailedDescription" in descriptionModule.items():
-                continue
-            else:
-                descriptionModule["detailedDescription"] = "N_A"
+            identificationModule = section["identificationModule"]
+            statusModule = section["statusModule"]
+            descriptionModule = section["descriptionModule"]
+            conditionsModule = section["conditionsModule"]
+            designModule = section["designModule"]
+            eligibilityModule = section["eligibilityModule"]
 
             response = ResBody(
                 nct_id=identificationModule["nctId"],
