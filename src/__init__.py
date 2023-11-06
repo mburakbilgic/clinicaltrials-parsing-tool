@@ -6,9 +6,9 @@ from fastapi import APIRouter, FastAPI
 from fastapi.openapi.models import OpenAPI
 
 MAIN_PATH = os.getcwd()
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config", "ctg-oas-v2.yaml")
-DATA_FILES = os.path.join(os.path.dirname(__file__), "data")
-LOG_FILES = os.path.join(os.path.dirname(__file__), "logs")
+CONFIG_PATH = os.path.join(MAIN_PATH, "system_docs\\config\\ctg-oas-v2.yaml")
+DATA_FILES = os.path.join(MAIN_PATH, "system_docs\\data")
+LOG_FILES = os.path.join(MAIN_PATH, "system_docs\\logs")
 
 router = APIRouter()
 
@@ -27,7 +27,7 @@ else:
 
 api_url = f"{server_url}/studies"
 params = {
-    "pageSize": 10,  # Results of each page
+    "pageSize": 1000,  # Results of each page
     "pageToken": None,  # In first page this should be empty
     "query.cond": "cancer",
     "filter.overallStatus": "RECRUITING"
