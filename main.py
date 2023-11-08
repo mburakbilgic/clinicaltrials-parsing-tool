@@ -5,7 +5,7 @@ from src.controller import controller_clinicaltrials, controller_log
 application = FastAPI()
 
 application.include_router(controller_clinicaltrials.router)
-# application.include_router(controller_log.router)
+application.include_router(controller_log.router)
 
 if __name__ == "__main__":
     import uvicorn
