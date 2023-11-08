@@ -12,7 +12,7 @@ class Worker:
         self.response = requests.get(src.api_url, params=src.params)
 
     def func_thread_settings(self):
-        # T - 3
+        # T - 2
         # thread options required about chunksize process
         pass
 
@@ -93,6 +93,6 @@ class Worker:
         return clinical_trials
 
     def func_log(self):
-        # T - 4
+        # T - 3
         # log options
         pass
