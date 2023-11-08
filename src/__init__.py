@@ -30,6 +30,7 @@ params = {
     "pageSize": 1000,  # Results of each page
     "pageToken": None,  # In first page this should be empty
     "query.cond": "cancer",
-    "filter.overallStatus": "RECRUITING"
+    "filter.overallStatus": "RECRUITING",
+    "filter.studyType": "INTERVENTIONAL"
 }
 response = requests.get(api_url, params=params)
