@@ -19,6 +19,6 @@ async def get_studies():
 
 @router.post("/post_studies")
 async def post_studies():
-    mapped_studies = Worker().func_post_clinicaltrials()
+    mapped_studies = Worker().func_post_gcs()
 
     return response_studies(mapped_studies)
