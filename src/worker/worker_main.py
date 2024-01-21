@@ -1,7 +1,11 @@
 import src
-from collections import defaultdict
+import json
+import tempfile
+
+from google.cloud import storage
 
 import requests
+from fastapi import HTTPException
 
 from src.model.response_clinicaltrials import ResponseClinicalTrial as ResBody
 
@@ -10,11 +14,31 @@ class Worker:
 
     def __init__(self):
         self.response = requests.get(src.api_url, params=src.params)
+        self.storage_client = storage.Client()
+        self.bucket = self.storage_client.bucket("monolith-technology_bucket-clinicaltrials")
+        self.nextPageToken = None
 
-    def func_thread_settings(self):
-        # T - 2
-        # thread options required about chunksize process
-        pass
+    def func_get_clinicaltrials(self):
+        all_studies = []
+        while True:
+            if self.response.status_code == 200:
+                data = self.response.json()
+                studies = data.get("studies", [])
+                token = data.get("nextPageToken")
+                all_studies.extend(studies)
+
+                if token is not None:
+                    src.params["pageToken"] = token
+                    self.response = requests.get(src.api_url, params=src.params)
+                    data = self.response.json()
+                    studies = data["studies"]
+                    all_studies.extend(studies)
+                else:
+                    break
+            else:
+                return {"error": "Request failed"}
+
+        return all_studies
 
     def func_fillna_studies(self, sections):
         keys_to_check = [
@@ -39,15 +63,7 @@ class Worker:
 
         return sections
 
-    def func_get_clinicaltrials(self):
-        if self.response.status_code == 200:
-            data = self.response.json()
-            studies = data["studies"]
-            return studies
-        else:
-            return {"error": "Request failed"}
-
-    def func_post_clinicaltrials(self):
+    def func_mapping_clinicaltrials(self):
         studies = self.func_get_clinicaltrials()
 
         clinical_trials = []
@@ -90,9 +106,25 @@ class Worker:
                 "eligibility_criteria": response.eligibility_criteria
             })
 
+        print(len(clinical_trials))
+
         return clinical_trials
 
-    def func_log(self):
-        # T - 3
-        # log options
-        pass
+    def func_post_gcs(self):
+        try:
+            file_name = "clinicaltrials.json"
+            data = self.func_mapping_clinicaltrials()
+
+            json_data = json.dumps(data, indent=2)
+
+            ct_blob = self.bucket.blob(file_name)
+            ct_blob.upload_from_string(data=json_data,
+                                       content_type='application/json')
+
+            return {"status": "success"}
+
+        except HTTPException as e:
+            raise e
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
